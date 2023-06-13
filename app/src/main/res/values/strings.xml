@@ -1,0 +1,42 @@
+<resources>
+    <string name="app_name">MyNewHumblr</string>
+    <string name="auth_login">Войти</string>
+    <string name="textviewLoginFragment">Найди единомышленников с Humblr</string>
+    <string name="auth_canceled">Аутентификация не выполнена</string>
+    <string name="skip">Пропустить</string>
+    <string name="welcom_to_Humblr">Добро пожаловать в Humblr</string>
+    <string name="reddits_here">Здесь собраны сообщества по всевозможным интересам</string>
+    <string name="subHumblr">SubHumblr</string>
+    <string name="you_can_find_new_sabs">Ты можешь найти новые сабы по интересам и посмотреть сабы, на которые подписан</string>
+    <string name="share_and_save">Делись и сохраняй</string>
+    <string name="favorite_and_profile">Вкладка избранное хранит закладки с комментариями и сабами. В профиле ты найдешь информацию о себе.</string>
+    <string name="subreddits">Сабреддиты</string>
+    <string name="favorite">Избранное</string>
+    <string name="profile">Профиль</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="download">Загрузить</string>
+    <string name="save">Сохранить</string>
+    <string name="author">"Автор поста: u/%1$s"</string>
+    <string name="downloaded">Загружено</string>
+    <string name="already_downloaded">Уже загружено ранее</string>
+    <string name="unsaved">Удалено из сохраненных</string>
+    <string name="saved">Сохранено</string>
+    <string name="likesM">%1$sM</string>
+    <string name="likesK">%1$sK</string>
+    <string name="search">Поиск</string>
+    <string name="new_tab">Новое</string>
+    <string name="popular">Популярное</string>
+    <string name="no_connection">Проверьте соединение с интернетом</string>
+    <string name="subscribed">Подписка на сабреддит</string>
+    <string name="unsubscribed">Отписка от сабреддита</string>
+    <string name="subscribers">Subscribers: %1$d</string>
+    <string name="share_url">https://www.reddit.com%1$s</string>
+    <string name="share_text">text/plain</string>
+    <string name="share">Share</string>
+    <string name="user_id">Id: %1$s</string>
+    <string name="karma">Karma: %1$d</string>
+    <string name="followers">Followers: %1$s</string>
+    <string name="make_friends">Make Friends</string>
+    <string name="friends_now">Пользователь добавлен в список друзей</string>
+</resources>

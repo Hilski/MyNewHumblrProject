@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/subredditsFragment3"
+        android:icon="@drawable/subreddits"
+        android:title="@string/subreddits" />
+    <item
+        android:id="@+id/favoriteFragment2"
+        android:icon="@drawable/favorite"
+        android:title="@string/favorite" />
+    <item
+        android:id="@+id/profileFragment2"
+        android:icon="@drawable/profile"
+        android:title="@string/profile" />
+</menu>

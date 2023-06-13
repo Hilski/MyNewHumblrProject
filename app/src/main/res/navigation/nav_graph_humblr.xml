@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph_humblr"
+    app:startDestination="@id/subredditsFragment3">
+
+
+    <fragment
+        android:id="@+id/subredditsFragment3"
+        android:name="com.example.mynewhumblr.ui.subreddits_fragment.SubredditsFragment"
+        android:label="fragment_subreddits"
+        tools:layout="@layout/fragment_subreddits" >
+        <action
+            android:id="@+id/action_subredditsFragment3_to_singleSubredditFragment"
+            app:destination="@id/singleSubredditFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/favoriteFragment2"
+        android:name="com.example.mynewhumblr.ui.favorite_fragment.FavoriteFragment"
+        android:label="fragment_favorite"
+        tools:layout="@layout/fragment_favorite" />
+    <fragment
+        android:id="@+id/profileFragment2"
+        android:name="com.example.mynewhumblr.ui.profile_fragment.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/singleSubredditFragment"
+        android:name="com.example.mynewhumblr.ui.subreddits_fragment.single_subreddit_fragment.SingleSubredditFragment"
+        android:label="fragment_single_subreddit"
+        tools:layout="@layout/fragment_single_subreddit" >
+        <action
+            android:id="@+id/action_singleSubredditFragment_to_userFragment"
+            app:destination="@id/userFragment" />
+        <action
+            android:id="@+id/action_singleSubredditFragment_to_subredditsFragment3"
+            app:destination="@id/subredditsFragment3" />
+        <action
+            android:id="@+id/action_singleSubredditFragment_to_singleSubredditCommentsFragment"
+            app:destination="@id/singleSubredditCommentsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/userFragment"
+        android:name="com.example.mynewhumblr.ui.subreddits_fragment.single_subreddit_fragment.user_fragment.UserFragment"
+        android:label="fragment_user"
+        tools:layout="@layout/fragment_user" />
+    <fragment
+        android:id="@+id/singleSubredditCommentsFragment"
+        android:name="com.example.mynewhumblr.ui.subreddits_fragment.single_subreddit_fragment.single_subreddit_comments_fragment.SingleSubredditCommentsFragment"
+        android:label="fragment_single_subreddit_comments"
+        tools:layout="@layout/fragment_single_subreddit_comments" />
+</navigation>
