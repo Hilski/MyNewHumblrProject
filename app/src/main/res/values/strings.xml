@@ -10,7 +10,7 @@
     <string name="you_can_find_new_sabs">Ты можешь найти новые сабы по интересам и посмотреть сабы, на которые подписан</string>
     <string name="share_and_save">Делись и сохраняй</string>
     <string name="favorite_and_profile">Вкладка избранное хранит закладки с комментариями и сабами. В профиле ты найдешь информацию о себе.</string>
-    <string name="subreddits">Сабреддиты</string>
+    <string name="subreddits">Сабреддиты:</string>
     <string name="favorite">Избранное</string>
     <string name="profile">Профиль</string>
     <!-- TODO: Remove or change this placeholder text -->
@@ -39,4 +39,7 @@
     <string name="followers">Followers: %1$s</string>
     <string name="make_friends">Make Friends</string>
     <string name="friends_now">Пользователь добавлен в список друзей</string>
+    <string name="user_avatar">avatar</string>
+    <string name="comments_label">Коментарии:</string>
+
 </resources>

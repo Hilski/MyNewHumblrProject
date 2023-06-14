@@ -16,7 +16,9 @@ import com.example.mynewhumblr.data.ClickableView
 import com.example.mynewhumblr.data.ListItem
 import com.example.mynewhumblr.data.LoadState
 import com.example.mynewhumblr.data.SubQuery
+import com.example.mynewhumblr.data.models.PostListing
 import com.example.mynewhumblr.data.models.ProfileModel
+import com.example.mynewhumblr.data.models.SubredditListing
 import com.example.mynewhumblr.databinding.FragmentSingleSubredditBinding
 import com.example.mynewhumblr.databinding.FragmentUserBinding
 import com.example.mynewhumblr.ui.subreddits_fragment.postsDelegate
@@ -32,11 +34,7 @@ class UserFragment : Fragment() {
     private var _binding: FragmentUserBinding? = null
     private val binding get() = _binding!!
 
-    private val adapter by lazy {
-        ListDelegationAdapter(postsDelegate { subQuery: SubQuery, _: ListItem, clickableView: ClickableView ->
-            onClick(subQuery, clickableView)
-        })
-    }
+               private val adapter = UserAdapter()
 
     var name = ""
 
@@ -94,7 +92,7 @@ class UserFragment : Fragment() {
                 val data = state.data as ProfileModel
                 if (data.urlAvatar != null) loadAvatar(data.urlAvatar!!)
                 loadProfileTexts(data)
-                loadUserContent(state.data2 as List<ListItem>)
+                loadUserContent(state.data2 as List<PostListing.PostListingData.Post>)
             }
             else -> {}
         }
@@ -119,10 +117,10 @@ class UserFragment : Fragment() {
         }
     }
 
-    private fun loadUserContent(data: List<ListItem>) {
+    private fun loadUserContent(data: List<PostListing.PostListingData.Post>) {
 
         binding.recycler.adapter = adapter
-        adapter.items = data
+       adapter.data = data
         Snackbar.make(binding.recycler, data.toString(), BaseTransientBottomBar.LENGTH_SHORT).show()
 
     }

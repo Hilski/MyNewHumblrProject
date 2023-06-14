@@ -34,19 +34,27 @@ class Repository @Inject constructor(
             ListTypes.SUBREDDIT -> humblrApi.getSubredditListing(source, page, token)
                 .data.children.toListSubreddit()
 
-            ListTypes.SUBREDDIT_POST ->  humblrApi.getSubredditPosts(source, page, token)
+            ListTypes.SUBREDDIT_POST -> humblrApi.getSubredditPosts(source, page, token)
                 .data.children.toListPost()
 
-            ListTypes.POST ->  humblrApi.getPostListing(source, page, token).data.children.toListPost()
+            ListTypes.POST -> humblrApi.getPostListing(
+                source,
+                page,
+                token
+            ).data.children.toListPost()
 
-            ListTypes.SUBSCRIBED_SUBREDDIT ->   humblrApi.getSubscribed(page, token)
+            ListTypes.SUBSCRIBED_SUBREDDIT -> humblrApi.getSubscribed(page, token)
                 .data.children.toListSubreddit()
 
             //Доделать
-            ListTypes.SAVED_POST ->  humblrApi.getSubredditListing(source, page, token)
+            ListTypes.SAVED_POST -> humblrApi.getSubredditListing(source, page, token)
                 .data.children.toListSubreddit()
 
-            ListTypes.SUBREDDITS_SEARCH -> humblrApi.searchSubredditsPaging(source, page, token).data.children.toListSubreddit()
+            ListTypes.SUBREDDITS_SEARCH -> humblrApi.searchSubredditsPaging(
+                source,
+                page,
+                token
+            ).data.children.toListSubreddit()
 
 
         }
@@ -70,22 +78,20 @@ class Repository @Inject constructor(
 
 //    suspend fun getFriends(): Friends = apiProfile.getFriends().data.toFriends()
 
-    suspend fun getAnotherUserProfile(username: String): ProfileModel = humblrApi.getAnotherUserProfile(username, token).data.toProfile()
+    suspend fun getAnotherUserProfile(username: String): ProfileModel =
+        humblrApi.getAnotherUserProfile(username, token).data.toProfile()
+
     suspend fun getComments(id: String): Comments = humblrApi.getComments(id, token)
 
     suspend fun makeFriends(username: String) = humblrApi.makeFriends(username, token)
 
     /** no comments in tech.reqs, but can add later, after comments view implementation*/
-    suspend fun getUserContent(username: String): List<ListItem> {
-        val list = mutableListOf<ListItem>()
-        humblrApi.getUserContent(username, token).data.children.forEach { child ->
-            child as PostListing.PostListingData.Post
-            list.add(child.toPostModel())
-            //           if (child is Post) list.add(child.toPostModel())
-        }
-        return list.toList()
-    }
+    suspend fun getUserContent(username: String) =
+        humblrApi.getUserContent(username, token).data.children
 
+    suspend fun getUserProfile(): MeResponse {
+        return userApi.me(token)
+    }
 
 
     /*    suspend fun getUserContent(username: String): SinglePostListing {
@@ -96,8 +102,9 @@ class Repository @Inject constructor(
      */
 
 
+    fun List<SubredditListing.SubredditListingData.Subreddit>.toListSubreddit(): List<SubredditModel> =
+        this.map { item -> item.toSubreddit() }
 
-    fun List<SubredditListing.SubredditListingData.Subreddit>.toListSubreddit(): List<SubredditModel> = this.map { item -> item.toSubreddit() }
     fun SubredditListing.SubredditListingData.Subreddit.toSubreddit(): SubredditModel {
 
         var url = data.community_icon
@@ -121,7 +128,10 @@ class Repository @Inject constructor(
             name = data.name
         )
     }
-    fun List<PostListing.PostListingData.Post>.toListPost(): List<PostModel> = this.map { item -> item.toPostModel() }
+
+    fun List<PostListing.PostListingData.Post>.toListPost(): List<PostModel> =
+        this.map { item -> item.toPostModel() }
+
     fun PostListing.PostListingData.Post.toPostModel(): PostModel {
         val voteDirection = when (data.likes) {
             null -> 0
@@ -152,7 +162,14 @@ class Repository @Inject constructor(
     }
 
     fun Profile.toProfile() =
-        ProfileModel(name = name, id = id, urlAvatar = urlAvatar, more_infos = more_infos?.toUserDataSub(), total_karma = total_karma)
+        ProfileModel(
+            name = name,
+            id = id,
+            urlAvatar = urlAvatar,
+            more_infos = more_infos?.toUserDataSub(),
+            total_karma = total_karma
+        )
+
     fun Profile.UserDataSub.toUserDataSub() = ProfileModel.UserDataSubscribers(subscribers, title)
 
 }

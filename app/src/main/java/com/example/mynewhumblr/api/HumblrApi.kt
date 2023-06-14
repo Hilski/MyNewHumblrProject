@@ -108,5 +108,5 @@ interface HumblrApi {
     suspend fun getUserContent(
         @Path("username") username: String,
         @Header("Authorization") authHeader: String
-    ): SinglePostListing
+    ): PostListing
 }
