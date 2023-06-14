@@ -41,5 +41,11 @@
     <string name="friends_now">Пользователь добавлен в список друзей</string>
     <string name="user_avatar">avatar</string>
     <string name="comments_label">Коментарии:</string>
+    <string name="friend_list">Список друзей</string>
+    <string name="clear_saved">Очистить сохраненные</string>
+    <string name="logout">Выйти</string>
+    <string name="logout_title">Вы уверены что хотите выйти?</string>
+    <string name="yes">Да</string>
+    <string name="no">Нет</string>
 
 </resources>

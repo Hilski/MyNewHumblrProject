@@ -13,6 +13,7 @@ import com.example.mynewhumblr.data.models.Profile
 import com.example.mynewhumblr.data.models.ProfileModel
 import com.example.mynewhumblr.data.models.SubredditListing
 import com.example.mynewhumblr.data.models.SubredditModel
+import com.example.mynewhumblr.data.models.UserFriends
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -23,11 +24,6 @@ class Repository @Inject constructor(
 
 ) {
     private val token = "Bearer ${TokenStorage.accessToken}"
-
-
-    suspend fun getUserInformation(): MeResponse {
-        return userApi.me(token)
-    }
 
     suspend fun getList(type: ListTypes, source: String?, page: String): List<ListItem> {
         return when (type) {
@@ -91,6 +87,10 @@ class Repository @Inject constructor(
 
     suspend fun getUserProfile(): MeResponse {
         return userApi.me(token)
+    }
+
+    suspend fun getUserFriends(): UserFriends {
+        return userApi.getUserFriends(token)
     }
 
 

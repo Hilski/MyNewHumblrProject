@@ -1,10 +1,13 @@
 package com.example.mynewhumblr.ui.profile_fragment
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
@@ -12,6 +15,7 @@ import com.example.mynewhumblr.R
 import com.example.mynewhumblr.data.models.MeResponse
 import com.example.mynewhumblr.databinding.FragmentProfileBinding
 import com.example.mynewhumblr.databinding.FragmentSubredditsBinding
+import com.example.mynewhumblr.ui.MainActivity
 import com.example.mynewhumblr.ui.utils.launchAndCollectIn
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -28,21 +32,33 @@ class ProfileFragment : Fragment() {
         _binding = FragmentProfileBinding.inflate(layoutInflater)
         return binding.root
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        showBottomView(requireActivity())
 
-        userProfileViewModel.userProfileStateFlow.launchAndCollectIn(viewLifecycleOwner){
+        userProfileViewModel.userProfileStateFlow.launchAndCollectIn(viewLifecycleOwner) {
             userProfileViewModel.getCurrentUserProfile()
             showUserProfile(it)
         }
 
-        binding.buttonLogout.setOnClickListener {
-//            findNavController().navigate(R.id.action_userProfileFragment_to_logoutFragment)
-        }
 
         binding.buttonFriends.setOnClickListener {
 //            findNavController().navigate(R.id.action_userProfileFragment_to_userFriendsFragment)
+        }
+
+        binding.buttonLogout.setOnClickListener {
+
+            val dialog = AlertDialog.Builder(requireContext())
+            dialog.setTitle(R.string.logout_title)
+                .setPositiveButton(R.string.yes) { _, _ ->
+                    userProfileViewModel.clearToken()
+                    val intent = Intent(context, MainActivity::class.java)
+                    startActivity(intent)
+                }
+                .setNegativeButton(R.string.no) { _, _ ->
+                    dialog.create().hide()
+                }
+            dialog.create().show()
         }
     }
 
@@ -51,11 +67,11 @@ class ProfileFragment : Fragment() {
             with(binding) {
                 Glide
                     .with(imageViewAvatar.context)
-                    .load(it.iconImg)
+                    .load(it.snoovatar_img)
                     .into(imageViewAvatar)
                 textViewProfileUserName.text = it.name
                 textViewComments.text = it.subreddit.subscribers.toString()
-                textViewKarma.text = it.totalKarma.toString()
+                textViewKarma.text = it.total_karma.toString()
             }
         }
     }
