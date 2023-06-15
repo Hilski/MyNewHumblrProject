@@ -47,5 +47,6 @@
     <string name="logout_title">Вы уверены что хотите выйти?</string>
     <string name="yes">Да</string>
     <string name="no">Нет</string>
+    <string name="something_went_wrong">Чтото пошло не так</string>
 
 </resources>

@@ -25,6 +25,11 @@ class Repository @Inject constructor(
 ) {
     private val token = "Bearer ${TokenStorage.accessToken}"
 
+
+    suspend fun getUserInformation(): MeResponse {
+        return userApi.me(token)
+    }
+
     suspend fun getList(type: ListTypes, source: String?, page: String): List<ListItem> {
         return when (type) {
             ListTypes.SUBREDDIT -> humblrApi.getSubredditListing(source, page, token)
@@ -82,15 +87,22 @@ class Repository @Inject constructor(
     suspend fun makeFriends(username: String) = humblrApi.makeFriends(username, token)
 
     /** no comments in tech.reqs, but can add later, after comments view implementation*/
-    suspend fun getUserContent(username: String) =
-        humblrApi.getUserContent(username, token).data.children
-
-    suspend fun getUserProfile(): MeResponse {
-        return userApi.me(token)
+    suspend fun getUserContent(username: String): List<ListItem> {
+        val list = mutableListOf<ListItem>()
+        humblrApi.getUserContent(username, token).data.children.forEach { child ->
+            child as PostListing.PostListingData.Post
+            list.add(child.toPostModel())
+            //           if (child is Post) list.add(child.toPostModel())
+        }
+        return list.toList()
     }
 
     suspend fun getUserFriends(): UserFriends {
         return userApi.getUserFriends(token)
+    }
+
+    suspend fun doNotMakeFriends(userName: String) {
+        userApi.doNotMakeFriends(token, userName = userName)
     }
 
 

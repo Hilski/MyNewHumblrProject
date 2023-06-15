@@ -8,9 +8,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
+import com.example.mynewhumblr.data.models.UserFriends
 import com.example.mynewhumblr.databinding.FragmentFriendsBinding
 import com.example.mynewhumblr.databinding.FragmentProfileBinding
 import com.example.mynewhumblr.ui.profile_fragment.UserProfileViewModel
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 class FriendsFragment : Fragment() {
 
@@ -18,7 +21,7 @@ class FriendsFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel: FriendsViewModel by viewModels()
     private val friendsAdapter = FriendsAdapter(
-        onDoNotBeFriendsClick = { children: Children, position: Int ->
+        onDoNotBeFriendsClick = { children: UserFriends.Data.Children, position: Int ->
             onClickDoNotBeFriends(
                 children,
                 position
@@ -38,16 +41,16 @@ class FriendsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 //        hideAppbarAndBottomView(requireActivity())
         binding.recyclerViewUserFriends.adapter =
-            userFriendsAdapter.withLoadStateFooter(CommonLoadStateAdapter())
+            friendsAdapter.withLoadStateFooter(LoadStateAdapter())
 
-        binding.swipeRefresh.setOnRefreshListener { userFriendsAdapter.refresh() }
+        binding.swipeRefresh.setOnRefreshListener { friendsAdapter.refresh() }
 
-        userFriendsAdapter.loadStateFlow.onEach {
+        friendsAdapter.loadStateFlow.onEach {
             binding.swipeRefresh.isRefreshing = it.refresh == LoadState.Loading
         }.launchIn(viewLifecycleOwner.lifecycleScope)
 
         viewModel.pageFriends.onEach {
-            userFriendsAdapter.submitData(it)
+            friendsAdapter.submitData(it)
         }.launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
@@ -55,8 +58,8 @@ class FriendsFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-    private fun onClickDoNotBeFriends(children: Children, position: Int) {
+    private fun onClickDoNotBeFriends(children: UserFriends.Data.Children, position: Int) {
         viewModel.doNotMakeFriends(children.name)
-        userFriendsAdapter.unfriendUser(position)
+        friendsAdapter.unfriendUser(position)
     }
 }

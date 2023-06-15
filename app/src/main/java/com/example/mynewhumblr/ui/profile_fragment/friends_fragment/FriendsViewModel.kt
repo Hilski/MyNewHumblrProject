@@ -5,11 +5,16 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
+import androidx.paging.cachedIn
+import com.example.mynewhumblr.R
+import com.example.mynewhumblr.data.models.ApiResult
+import com.example.mynewhumblr.data.models.UiText
 import com.example.mynewhumblr.data.models.UserFriends
 import com.example.mynewhumblr.data.repository.Repository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 

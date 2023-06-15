@@ -43,7 +43,7 @@ class ProfileFragment : Fragment() {
 
 
         binding.buttonFriends.setOnClickListener {
-//            findNavController().navigate(R.id.action_userProfileFragment_to_userFriendsFragment)
+            findNavController().navigate(R.id.action_profileFragment2_to_friendsFragment)
         }
 
         binding.buttonLogout.setOnClickListener {

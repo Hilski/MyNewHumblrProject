@@ -25,7 +25,7 @@ class UserProfileViewModel @Inject constructor(
     fun getCurrentUserProfile(){
         viewModelScope.launch {
             runCatching {
-                userProfile = repository.getUserProfile()
+                userProfile = repository.getUserInformation()
             }.onSuccess {
                 _userProfileStateFlow.value = userProfile
             }.onFailure {
