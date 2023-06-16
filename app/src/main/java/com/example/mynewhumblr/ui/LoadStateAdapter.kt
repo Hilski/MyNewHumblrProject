@@ -1,4 +1,4 @@
-package com.example.mynewhumblr.ui.profile_fragment.friends_fragment
+package com.example.mynewhumblr.ui
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

@@ -110,6 +110,33 @@ interface HumblrApi {
         @Path("username") username: String,
         @Header("Authorization") authHeader: String
     ): PostListing
+
+    @POST("/api/subscribe")
+    suspend fun subscribeUnsubscribe(
+        @Header("Authorization") token: String,
+        @Query("action") action: String,
+        @Query("sr_name") displayName: String
+    )
+
+    /*    @GET("/subreddits/new")
+        suspend fun getNewSubreddits(
+            @Header("Authorization") token: String,
+            @Query("after") afterKey: String
+        ): SubredditListing
+     */
+    @GET("/subreddits/mine/subscriber")
+    suspend fun loadFavoriteSubreddits(
+        @Header("Authorization") token: String,
+        @Query("after") afterKey: String
+    ): SubredditListing
+
+@GET("/user/{userName}/saved")
+suspend fun loadFavoritePosts(
+    @Header("Authorization") token: String,
+    @Path("userName") userName: String,
+    @Query("after") after: String,
+    @Query("type") type: String = "links"
+): SubredditListing
 }
 
 data class RequestBody(val name: String)

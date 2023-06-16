@@ -10,6 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
 import com.example.mynewhumblr.data.models.UserFriends
 import com.example.mynewhumblr.databinding.FragmentFriendsBinding
+import com.example.mynewhumblr.ui.LoadStateAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach

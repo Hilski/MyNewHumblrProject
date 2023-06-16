@@ -97,6 +97,23 @@ class Repository @Inject constructor(
         return list.toList()
     }
 
+    /*   suspend fun getNewSubreddits(afterKey: String): SubredditListing {
+           return humblrApi.getNewSubreddits(token , afterKey = afterKey)
+       }
+
+     */
+    suspend fun loadFavoriteSubreddits(afterKey: String): SubredditListing {
+        return humblrApi.loadFavoriteSubreddits(token, afterKey = afterKey)
+    }
+
+    suspend fun loadFavoritePosts(
+        afterKey: String,
+        userName: String,
+        type: String
+    ): SubredditListing {
+        return humblrApi.loadFavoritePosts(token, userName = userName, after = afterKey)
+    }
+
     suspend fun getUserFriends(): UserFriends {
         return userApi.getUserFriends(token)
     }
@@ -112,7 +129,9 @@ class Repository @Inject constructor(
         }
 
      */
-
+    suspend fun subscribeUnsubscribe(action: String, displayName: String) {
+        humblrApi.subscribeUnsubscribe(token, action, displayName)
+    }
 
     fun List<SubredditListing.SubredditListingData.Subreddit>.toListSubreddit(): List<SubredditModel> =
         this.map { item -> item.toSubreddit() }
@@ -154,7 +173,7 @@ class Repository @Inject constructor(
             selfText = data.selftext,
             authorFullname = data.author_fullname,
             saved = data.saved,
-            title = data.title?: "",
+            title = data.title ?: "",
             subredditNamePrefixed = data.subreddit_name_prefixed,
             name = data.name,
             score = data.score,
@@ -164,7 +183,7 @@ class Repository @Inject constructor(
             author = data.author,
             numComments = data.num_comments,
             permalink = data.permalink,
-            url = data.url?: "",
+            url = data.url ?: "",
             fallbackUrl = null,
 //            fallbackUrl = data.media?.reddit_video?.fallback_url,
             isVideo = data.is_video,
