@@ -52,8 +52,8 @@ class UserFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         name = arguments?.getString("MyArg").toString()
-        Snackbar.make(binding.recycler, name, BaseTransientBottomBar.LENGTH_SHORT).show()
-        Toast.makeText(context, name, Toast.LENGTH_LONG).show()
+ //       Snackbar.make(binding.recycler, name, BaseTransientBottomBar.LENGTH_SHORT).show()
+ //       Toast.makeText(context, name, Toast.LENGTH_LONG).show()
 
         getLoadingState(name)
         setMakeFriendsClick(name)
@@ -87,11 +87,13 @@ class UserFragment : Fragment() {
 
             is LoadState.Content -> {
 
-                Snackbar.make(binding.recycler, "Content", BaseTransientBottomBar.LENGTH_SHORT).show()
+ //               Snackbar.make(binding.recycler, "Content", BaseTransientBottomBar.LENGTH_SHORT).show()
+
                 binding.containerView.isVisible = true
                 binding.common.progressBar.isVisible = false
                 binding.common.error.isVisible = false
                 val data = state.data as ProfileModel
+                Snackbar.make(binding.recycler, data.urlAvatar.toString(), BaseTransientBottomBar.LENGTH_SHORT).show()
                 if (data.urlAvatar != null) loadAvatar(data.urlAvatar!!)
                 loadProfileTexts(data)
                 loadUserContent(state.data2 as List<ListItem>)
@@ -107,6 +109,7 @@ class UserFragment : Fragment() {
             .diskCacheStrategy(DiskCacheStrategy.ALL)
             .placeholder(R.drawable.placeholder)
             .into(binding.imageView)
+        Snackbar.make(binding.recycler, url, BaseTransientBottomBar.LENGTH_SHORT).show()
     }
 
     private fun loadProfileTexts(data: ProfileModel) {
@@ -123,7 +126,7 @@ class UserFragment : Fragment() {
 
         binding.recycler.adapter = adapter
         adapter.items = data
-        Snackbar.make(binding.recycler, data.toString(), BaseTransientBottomBar.LENGTH_SHORT).show()
+ //       Snackbar.make(binding.recycler, data.toString(), BaseTransientBottomBar.LENGTH_SHORT).show()
 
     }
 

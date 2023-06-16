@@ -168,7 +168,7 @@ class SingleSubredditFragment : Fragment() {
              }
             ClickableView.SUBREDDIT -> {
                 bundle.putString("MyArg", subQuery.id)
-                Toast.makeText(context, subQuery.id, Toast.LENGTH_LONG).show()
+//                Toast.makeText(context, subQuery.id, Toast.LENGTH_LONG).show()
                 findNavController().navigate(
                     R.id.action_singleSubredditFragment_to_singleSubredditCommentsFragment,
                     bundle

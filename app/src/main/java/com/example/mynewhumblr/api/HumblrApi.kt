@@ -3,7 +3,6 @@ package com.example.mynewhumblr.api
 import com.example.mynewhumblr.data.models.ClickedUserProfile
 import com.example.mynewhumblr.data.models.Comments
 import com.example.mynewhumblr.data.models.PostListing
-import com.example.mynewhumblr.data.models.SinglePostListing
 import com.example.mynewhumblr.data.models.SubredditListing
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -97,12 +96,14 @@ interface HumblrApi {
         @Query("limit") limit: Int = 10
     ): Comments
 
+
     @PUT("/api/v1/me/friends/{username}")
     suspend fun makeFriends(
-        @Path("username") username: String,
+        @Path("username") userName: String,
         @Header("Authorization") authHeader: String,
-        @Body requestBody: String = "{\"name\": \"$username\"}"
+        @Body requestBody: RequestBody = RequestBody(userName)
     )
+
 
     @GET("/user/{username}")
     suspend fun getUserContent(
@@ -110,3 +111,5 @@ interface HumblrApi {
         @Header("Authorization") authHeader: String
     ): PostListing
 }
+
+data class RequestBody(val name: String)

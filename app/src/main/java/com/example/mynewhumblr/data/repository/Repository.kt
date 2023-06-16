@@ -154,7 +154,7 @@ class Repository @Inject constructor(
             selfText = data.selftext,
             authorFullname = data.author_fullname,
             saved = data.saved,
-            title = data.title,
+            title = data.title?: "",
             subredditNamePrefixed = data.subreddit_name_prefixed,
             name = data.name,
             score = data.score,
@@ -164,7 +164,7 @@ class Repository @Inject constructor(
             author = data.author,
             numComments = data.num_comments,
             permalink = data.permalink,
-            url = data.url,
+            url = data.url?: "",
             fallbackUrl = null,
 //            fallbackUrl = data.media?.reddit_video?.fallback_url,
             isVideo = data.is_video,
@@ -177,7 +177,7 @@ class Repository @Inject constructor(
         ProfileModel(
             name = name,
             id = id,
-            urlAvatar = urlAvatar,
+            urlAvatar = snoovatar_img,
             more_infos = more_infos?.toUserDataSub(),
             total_karma = total_karma
         )

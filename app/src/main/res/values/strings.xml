@@ -48,5 +48,6 @@
     <string name="yes">Да</string>
     <string name="no">Нет</string>
     <string name="something_went_wrong">Чтото пошло не так</string>
+    <string name="delete">Удалить</string>
 
 </resources>
