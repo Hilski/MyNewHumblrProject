@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -17,16 +18,25 @@ import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import com.example.mynewhumblr.R
 import com.example.mynewhumblr.data.BANNER_IMAGE_KEY
+import com.example.mynewhumblr.data.ClickableView
 import com.example.mynewhumblr.data.DISPLAY_NAME_KEY
 import com.example.mynewhumblr.data.ICON_KEY
 import com.example.mynewhumblr.data.IS_SUBSCRIBER_KEY
+import com.example.mynewhumblr.data.ListItem
+import com.example.mynewhumblr.data.SUBSCRIBE
+import com.example.mynewhumblr.data.SubQuery
 import com.example.mynewhumblr.data.models.ApiResult
+import com.example.mynewhumblr.data.models.PostListing
 import com.example.mynewhumblr.data.models.SubredditListing
 import com.example.mynewhumblr.data.models.UiText
 import com.example.mynewhumblr.data.models.UserFriends
 import com.example.mynewhumblr.databinding.FragmentFavoriteBinding
 import com.example.mynewhumblr.databinding.FragmentProfileBinding
 import com.example.mynewhumblr.ui.LoadStateAdapter
+import com.example.mynewhumblr.ui.subreddits_fragment.SubredditsPagedDataDelegationAdapter
+import com.google.android.material.snackbar.BaseTransientBottomBar
+import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.tabs.TabLayout
 import kotlinx.coroutines.flow.onEach
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
@@ -37,17 +47,10 @@ class FavoriteFragment : Fragment() {
     private var _binding: FragmentFavoriteBinding? = null
     private val binding get() = _binding!!
     private val viewModel : FavoriteViewModel by viewModels()
-    private val subredditAdapter = SubredditAdapter(
-        onClick = { children: SubredditListing.SubredditListingData.Subreddit -> onItemClick(children) },
-        onClickSubscribe = { name, isSubscribed, position ->
-            onSubscribeClick(
-                name,
-                isSubscribed,
-                position
-            )
-        },
-        onClickShare = { url: String -> onShareClick(url) }
-    )
+    private val adapter by lazy { SubredditsPagedDataDelegationAdapter {
+            subQuery: SubQuery, item: ListItem, clickableView: ClickableView ->
+        onClick(subQuery, item, clickableView) } }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -56,137 +59,73 @@ class FavoriteFragment : Fragment() {
         return binding.root
     }
 
-    private fun onShareClick(url: String) {
-        val fullUrl = buildString {
-            this
-                .append("www.reddit.com")
-                .append(url)
-        }
-        val intent = Intent(Intent.ACTION_SEND).also {
-            it.putExtra(Intent.EXTRA_TEXT, fullUrl)
-            it.type = "text/plain"
-        }
-        try {
-            requireContext().startActivity(intent)
-        } catch (e: ActivityNotFoundException) {
-            Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT).show()
-        }
-    }
-    private fun onSubscribeClick(name: String, isSubscribed: Boolean, position: Int) {
-        viewModel.subscribeUnsubscribe(name, isSubscribed, position)
-    }
-    private fun onItemClick(children: SubredditListing.SubredditListingData.Subreddit) {
-        val bundle = Bundle()
-        bundle.putString(DISPLAY_NAME_KEY, children.data.display_name)
-        bundle.putString(BANNER_IMAGE_KEY, children.data.banner_img)
-        bundle.putString(ICON_KEY, children.data.icon_img)
-        bundle.putBoolean(IS_SUBSCRIBER_KEY, children.data.user_is_subscriber)
 
-        //Добавить переход
-//        findNavController().navigate(R.id.action_favoriteFragment_to_postsFragment, bundle)
-        Toast.makeText(requireContext(), children.data.id, Toast.LENGTH_SHORT).show()
-    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        showBottomView(requireActivity())
-        binding.recyclerViewSubreddits.adapter =
-            subredditAdapter.withLoadStateFooter(LoadStateAdapter())
 
-        binding.swipeRefreshFavorite.setOnRefreshListener { subredditAdapter.refresh() }
-
-        subredditAdapter.loadStateFlow.onEach {
-            binding.swipeRefreshFavorite.isRefreshing = it.refresh == LoadState.Loading
-        }.launchIn(viewLifecycleOwner.lifecycleScope)
-
-        loadFavoriteSubreddits()
-        handleToggleButtons()
-        observeSubscribeResult()
+        loadContent()
+        tabLayoutSelectedListener(binding.toggleType, false)
+        tabLayoutSelectedListener(binding.toggleSource, true)
+        loadStateItemsObserve()
     }
 
-    private fun loadFavoriteSubreddits() {
-        viewModel.pageFavoriteSubredditChildren.onEach {
-            subredditAdapter.submitData(it)
-        }.launchIn(viewLifecycleOwner.lifecycleScope)
-    }
-
-    private fun loadFavoritePosts() {
-        viewModel.pageFavoritePostChildren.onEach {
-            subredditAdapter.submitData(it)
-        }.launchIn(viewLifecycleOwner.lifecycleScope)
-    }
-
-    private fun handleToggleButtons() {
-        with(binding) {
-            toggleButtonSubreddits.setOnCheckedChangeListener { _, isChecked ->
-                if (isChecked) {
-                    loadFavoriteSubreddits()
-                    toggleButtonPosts.isChecked = false
-                    setupButtons(
-                        R.color.white,
-                        R.drawable.rectangle_8,
-                        R.color.black,
-                        R.drawable.rectangle_1
-                    )
-                }
-            }
-            toggleButtonPosts.setOnCheckedChangeListener { _, isChecked ->
-                if (isChecked) {
-                    loadFavoritePosts()
-                    toggleButtonSubreddits.isChecked = false
-                    setupButtons(
-                        R.color.black,
-                        R.drawable.rectangle_1,
-                        R.color.white,
-                        R.drawable.rectangle_8
-                    )
-                }
+    private fun loadContent() {
+        binding.recyclerView.adapter = adapter
+        viewLifecycleOwner.lifecycleScope.launchWhenCreated {
+            viewModel.thingList.collect { pagingData ->
+                adapter.submitData(pagingData)
             }
         }
     }
 
-    private fun observeSubscribeResult() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.CREATED) {
-                viewModel.subscribeChannel.collect { result ->
-                    if (result is ApiResult.Error) {
-                        Toast.makeText(requireContext(), UiText.ResourceString(R.string.something_went_wrong).asString(requireContext()), Toast.LENGTH_SHORT).show()
-                    } else {
-                        subredditAdapter.updateElement(result)
-                    }
-                }
+    private fun loadStateItemsObserve() {
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            adapter.loadStateFlow.collect { state ->
+                binding.common.progressBar.isVisible =
+                    state.refresh is LoadState.Loading || state.append is LoadState.Loading
+                binding.common.error.isVisible =
+                    state.refresh is LoadState.Error || state.append is LoadState.Error || state.prepend is LoadState.Error
+                binding.noSavedPosts.isVisible =
+                    state.refresh is LoadState.NotLoading && adapter.itemCount == 0
             }
         }
     }
-    private fun setupButtons(
-        newColor: Int,
-        newBackground: Int,
-        popularColor: Int,
-        popularBackground: Int
-    ) {
-        binding.toggleButtonSubreddits.setTextColor(
-            resources.getColor(
-                newColor,
-                context?.theme
-            )
-        )
-        binding.toggleButtonSubreddits.background = (ResourcesCompat.getDrawable(
-            resources,
-            newBackground,
-            context?.theme
-        ))
-        binding.toggleButtonPosts.setTextColor(
-            resources.getColor(
-                popularColor,
-                context?.theme
-            )
-        )
-        binding.toggleButtonPosts.background = (ResourcesCompat.getDrawable(
-            resources,
-            popularBackground,
-            context?.theme
-        ))
+
+    private fun tabLayoutSelectedListener(tabLayout: TabLayout, isSource: Boolean) {
+        tabLayout.setSelectedTabListener { position ->
+            viewModel.setQuery(position, isSource)
+        }
     }
 
+    private fun onClick(subQuery: SubQuery, item: ListItem, clickableView: ClickableView) {
+        when (clickableView) {
+            ClickableView.SAVE -> viewModel.savePost(postName = subQuery.name)
+            ClickableView.UNSAVE -> viewModel.unsavePost(postName = subQuery.name)
+            ClickableView.VOTE ->
+                viewModel.votePost(voteDirection = subQuery.voteDirection, postName = subQuery.name)
+            ClickableView.SUBSCRIBE -> {
+                viewModel.subscribe(subQuery)
+                val text =
+                    if (subQuery.action == SUBSCRIBE) getString(R.string.subscribed)
+                    else getString(R.string.unsubscribed)
+                Snackbar.make(binding.recyclerView, text, BaseTransientBottomBar.LENGTH_SHORT)
+                    .show()
+            }
+            ClickableView.USER -> viewModel.navigateToUser(this, subQuery.name)
+            ClickableView.SUBREDDIT ->
+                viewModel.navigateToSingleSubreddit(this, item)
+        }
+    }
+
+    fun TabLayout.setSelectedTabListener(block: (position: Int) -> Unit){
+        this.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                if (tab != null) { block(tab.position) }
+            }
+            override fun onTabUnselected(tab: TabLayout.Tab?) {}
+            override fun onTabReselected(tab: TabLayout.Tab?) {}
+        })
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()

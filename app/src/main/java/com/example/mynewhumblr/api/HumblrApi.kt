@@ -124,7 +124,15 @@ interface HumblrApi {
             @Query("after") afterKey: String
         ): SubredditListing
      */
-    @GET("/subreddits/mine/subscriber")
+
+    @GET("/user/{username}/saved/")
+    suspend fun getSaved(
+        @Path("username") username: String?,
+        @Query("after") page: String,
+        @Header("Authorization") token: String
+    ): PostListing
+
+    @GET("/subreddits/mine/subscriber")   //ЛИШНЕЕ
     suspend fun loadFavoriteSubreddits(
         @Header("Authorization") token: String,
         @Query("after") afterKey: String
@@ -136,7 +144,8 @@ suspend fun loadFavoritePosts(
     @Path("userName") userName: String,
     @Query("after") after: String,
     @Query("type") type: String = "links"
-): SubredditListing
+): PostListing
 }
+
 
 data class RequestBody(val name: String)

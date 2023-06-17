@@ -6,60 +6,73 @@
     android:layout_height="match_parent"
     tools:context=".ui.favorite_fragment.FavoriteFragment">
 
-    <ToggleButton
-        android:id="@+id/toggleButtonSubreddits"
-        android:layout_width="150dp"
-        android:layout_height="32dp"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/indicator_active_background"
-        android:text="@string/subreddits_favorite"
-        android:textAllCaps="false"
-        android:textColor="@color/white"
-        android:textOff="@string/subreddits_favorite"
-        android:textOn="@string/subreddits_favorite"
-        app:layout_constraintEnd_toStartOf="@+id/toggleButtonPosts"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ToggleButton
-        android:id="@+id/toggleButtonPosts"
-        android:layout_width="150dp"
-        android:layout_height="32dp"
-        android:background="@drawable/rectangle_1"
-        android:text="@string/posts"
-        android:textAllCaps="false"
-        android:textColor="@color/black"
-        android:textOff="@string/posts"
-        android:textOn="@string/posts"
-        app:layout_constraintBottom_toBottomOf="@+id/toggleButtonSubreddits"
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/toggle_type"
+        style="@style/MyTabLayoutStyle"
+        android:layout_marginTop="19dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/toggleButtonSubreddits"
-        app:layout_constraintTop_toTopOf="@+id/toggleButtonSubreddits" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swipeRefreshFavorite"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/posts" />
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/subreddits" />
+
+    </com.google.android.material.tabs.TabLayout>
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/toggle_source"
+        style="@style/MyTabLayoutStyle"
         android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toggle_type">
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/all" />
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/saved_or_all" />
+
+    </com.google.android.material.tabs.TabLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="63dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constrainedHeight="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toggleButtonPosts">
+        app:layout_constraintTop_toBottomOf="@id/toggle_source"
+        tools:listitem="@layout/item_subreddit" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerViewSubreddits"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginTop="8dp"
-            android:orientation="vertical"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/toggleButtonNew"
-            tools:listitem="@layout/item_subreddit" />
+    <TextView
+        android:id="@+id/no_saved_posts"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="8dp"
+        android:gravity="center"
+        android:text="@string/you_have_no_saved_posts"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:layout_constraintBottom_toBottomOf="@+id/recycler_view"
+        app:layout_constraintTop_toBottomOf="@id/toggle_source" />
 
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+    <include
+        android:id="@+id/common"
+        layout="@layout/common_progress_error" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

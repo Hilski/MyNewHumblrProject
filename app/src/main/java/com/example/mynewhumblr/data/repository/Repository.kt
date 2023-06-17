@@ -48,8 +48,10 @@ class Repository @Inject constructor(
                 .data.children.toListSubreddit()
 
             //Доделать
-            ListTypes.SAVED_POST -> humblrApi.getSubredditListing(source, page, token)
-                .data.children.toListSubreddit()
+            ListTypes.SAVED_POST -> {
+                val username = userApi.me(token).name
+                humblrApi.getSaved(username, page, token).data.children.toListPost()
+            }
 
             ListTypes.SUBREDDITS_SEARCH -> humblrApi.searchSubredditsPaging(
                 source,
@@ -110,9 +112,12 @@ class Repository @Inject constructor(
         afterKey: String,
         userName: String,
         type: String
-    ): SubredditListing {
-        return humblrApi.loadFavoritePosts(token, userName = userName, after = afterKey)
+    ): PostListing {
+        val username = userApi.me(token).name ?: ""
+        return humblrApi.loadFavoritePosts(token, username, after = afterKey)
     }
+
+
 
     suspend fun getUserFriends(): UserFriends {
         return userApi.getUserFriends(token)

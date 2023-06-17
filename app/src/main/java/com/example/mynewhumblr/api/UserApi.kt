@@ -1,6 +1,7 @@
 package com.example.mynewhumblr.api
 
 import com.example.mynewhumblr.data.models.MeResponse
+import com.example.mynewhumblr.data.models.Profile
 import com.example.mynewhumblr.data.models.UserFriends
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -21,4 +22,9 @@ interface UserApi {
         @Header("Authorization") token: String,
         @Path("username") userName: String,
     )
+
+/*    @GET("/api/v1/me")
+    suspend fun getLoggedUserProfile(): Profile
+
+ */
 }

@@ -70,19 +70,7 @@ fun postsDelegate(
             }
         } else binding.postBodyImage.visibility = View.GONE
 
-        binding.downloadButton.setOnClickListener {
-            if (!binding.downloadButton.isSelected) {
-                binding.downloadButton.isSelected = true
-                Snackbar.make(
-                    binding.root, getString(R.string.downloaded),
-                    BaseTransientBottomBar.LENGTH_SHORT
-                ).show()
-            } else Snackbar.make(
-                binding.root, getString(R.string.already_downloaded),
-                BaseTransientBottomBar.LENGTH_SHORT
-            )
-                .show()
-        }
+
 
         binding.upVoteButton.isSelected = item.likedByUser == true
 

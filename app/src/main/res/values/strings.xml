@@ -51,5 +51,8 @@
     <string name="delete">Удалить</string>
     <string name="subreddits_favorite">сабреддиты</string>
     <string name="posts">Посты</string>
+    <string name="all">Все</string>
+    <string name="saved_or_all">Сохраненные</string>
+    <string name="you_have_no_saved_posts">Сохраненных постов нет</string>
 
 </resources>
