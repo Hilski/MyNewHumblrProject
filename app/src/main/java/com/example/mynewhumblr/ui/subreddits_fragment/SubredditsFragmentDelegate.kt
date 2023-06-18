@@ -25,7 +25,6 @@ fun subredditsDelegate(
 ) {
     bind {
         binding.subredditTitle.text = item.namePrefixed
-        binding.subredditDescription.text = item.description
         binding.subscribeButton.isSelected = item.isUserSubscriber == true
         if (item.imageUrl != null) {
             Glide.with(binding.fullSubredditCard)
@@ -69,8 +68,6 @@ fun postsDelegate(
                 visibility = View.VISIBLE
             }
         } else binding.postBodyImage.visibility = View.GONE
-
-
 
         binding.upVoteButton.isSelected = item.likedByUser == true
 

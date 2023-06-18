@@ -5,7 +5,6 @@ import androidx.annotation.StringRes
 import javax.inject.Inject
 
 interface UiText {
-
     fun asString(context: Context): String
 
     class DynamicString @Inject constructor(private val value: String): UiText {

@@ -21,10 +21,8 @@ import javax.inject.Singleton
 class Repository @Inject constructor(
     private val humblrApi: HumblrApi,
     private val userApi: UserApi
-
 ) {
     private val token = "Bearer ${TokenStorage.accessToken}"
-
 
     suspend fun getUserInformation(): MeResponse {
         return userApi.me(token)
@@ -47,7 +45,6 @@ class Repository @Inject constructor(
             ListTypes.SUBSCRIBED_SUBREDDIT -> humblrApi.getSubscribed(page, token)
                 .data.children.toListSubreddit()
 
-            //Доделать
             ListTypes.SAVED_POST -> {
                 val username = userApi.me(token).name
                 humblrApi.getSaved(username, page, token).data.children.toListPost()
@@ -58,8 +55,6 @@ class Repository @Inject constructor(
                 page,
                 token
             ).data.children.toListSubreddit()
-
-
         }
     }
 
@@ -76,48 +71,23 @@ class Repository @Inject constructor(
 
     suspend fun unsavePost(postName: String) = humblrApi.unsavePost(postName, token)
 
-
-//    suspend fun getLoggedUserProfile(): Profile = apiProfile.getLoggedUserProfile().toProfile()
-
-//    suspend fun getFriends(): Friends = apiProfile.getFriends().data.toFriends()
-
     suspend fun getAnotherUserProfile(username: String): ProfileModel =
         humblrApi.getAnotherUserProfile(username, token).data.toProfile()
 
-    suspend fun getComments(id: String): Comments = humblrApi.getComments(id, token)
+    suspend fun getComments(postId: String): List<Comments> {
+        return humblrApi.getComments(token, postId = postId)
+    }
 
     suspend fun makeFriends(username: String) = humblrApi.makeFriends(username, token)
 
-    /** no comments in tech.reqs, but can add later, after comments view implementation*/
     suspend fun getUserContent(username: String): List<ListItem> {
         val list = mutableListOf<ListItem>()
         humblrApi.getUserContent(username, token).data.children.forEach { child ->
             child as PostListing.PostListingData.Post
             list.add(child.toPostModel())
-            //           if (child is Post) list.add(child.toPostModel())
         }
         return list.toList()
     }
-
-    /*   suspend fun getNewSubreddits(afterKey: String): SubredditListing {
-           return humblrApi.getNewSubreddits(token , afterKey = afterKey)
-       }
-
-     */
-    suspend fun loadFavoriteSubreddits(afterKey: String): SubredditListing {
-        return humblrApi.loadFavoriteSubreddits(token, afterKey = afterKey)
-    }
-
-    suspend fun loadFavoritePosts(
-        afterKey: String,
-        userName: String,
-        type: String
-    ): PostListing {
-        val username = userApi.me(token).name ?: ""
-        return humblrApi.loadFavoritePosts(token, username, after = afterKey)
-    }
-
-
 
     suspend fun getUserFriends(): UserFriends {
         return userApi.getUserFriends(token)
@@ -125,17 +95,6 @@ class Repository @Inject constructor(
 
     suspend fun doNotMakeFriends(userName: String) {
         userApi.doNotMakeFriends(token, userName = userName)
-    }
-
-
-    /*    suspend fun getUserContent(username: String): SinglePostListing {
-
-            return humblrApi.getUserContent(username, token)
-        }
-
-     */
-    suspend fun subscribeUnsubscribe(action: String, displayName: String) {
-        humblrApi.subscribeUnsubscribe(token, action, displayName)
     }
 
     fun List<SubredditListing.SubredditListingData.Subreddit>.toListSubreddit(): List<SubredditModel> =
@@ -207,5 +166,4 @@ class Repository @Inject constructor(
         )
 
     fun Profile.UserDataSub.toUserDataSub() = ProfileModel.UserDataSubscribers(subscribers, title)
-
 }

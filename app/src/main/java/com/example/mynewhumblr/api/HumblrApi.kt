@@ -85,16 +85,11 @@ interface HumblrApi {
         @Header("Authorization") authHeader: String
     ): ClickedUserProfile
 
-    //Ниже апи запроса комментариев, создать модель
-    @GET("/comments/{id}/.json")
+    @GET("/comments/{postId}")
     suspend fun getComments(
-        @Path("id") id: String,
-        @Header("Authorization") authHeader: String,
-        @Query("depth") depth: Int = 1,
-        @Query("context") context: Int = 2,
-        @Query("showmedia") showmedia: Boolean = false,
-        @Query("limit") limit: Int = 10
-    ): Comments
+        @Header("Authorization") token: String,
+        @Path("postId") postId: String
+    ): List<Comments>
 
 
     @PUT("/api/v1/me/friends/{username}")
@@ -104,26 +99,11 @@ interface HumblrApi {
         @Body requestBody: RequestBody = RequestBody(userName)
     )
 
-
     @GET("/user/{username}")
     suspend fun getUserContent(
         @Path("username") username: String,
         @Header("Authorization") authHeader: String
     ): PostListing
-
-    @POST("/api/subscribe")
-    suspend fun subscribeUnsubscribe(
-        @Header("Authorization") token: String,
-        @Query("action") action: String,
-        @Query("sr_name") displayName: String
-    )
-
-    /*    @GET("/subreddits/new")
-        suspend fun getNewSubreddits(
-            @Header("Authorization") token: String,
-            @Query("after") afterKey: String
-        ): SubredditListing
-     */
 
     @GET("/user/{username}/saved/")
     suspend fun getSaved(
@@ -131,21 +111,6 @@ interface HumblrApi {
         @Query("after") page: String,
         @Header("Authorization") token: String
     ): PostListing
-
-    @GET("/subreddits/mine/subscriber")   //ЛИШНЕЕ
-    suspend fun loadFavoriteSubreddits(
-        @Header("Authorization") token: String,
-        @Query("after") afterKey: String
-    ): SubredditListing
-
-@GET("/user/{userName}/saved")
-suspend fun loadFavoritePosts(
-    @Header("Authorization") token: String,
-    @Path("userName") userName: String,
-    @Query("after") after: String,
-    @Query("type") type: String = "links"
-): PostListing
 }
-
 
 data class RequestBody(val name: String)

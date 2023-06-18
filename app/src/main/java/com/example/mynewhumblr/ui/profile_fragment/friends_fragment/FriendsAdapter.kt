@@ -15,9 +15,6 @@ class FriendsAdapter (
     ) : PagingDataAdapter<UserFriends.Data.Children, FriendsViewHolder>(DiffUtilCallbackFriends()) {
 
         fun unfriendUser(position: Int) {
-//        snapshot()[position]?.let {
-//            it.name
-//        }
             notifyItemRemoved(position)
         }
 

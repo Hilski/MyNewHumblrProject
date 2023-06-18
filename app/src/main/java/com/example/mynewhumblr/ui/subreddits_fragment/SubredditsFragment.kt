@@ -14,6 +14,7 @@ import com.example.mynewhumblr.R
 import com.example.mynewhumblr.data.ClickableView
 import com.example.mynewhumblr.data.ListItem
 import com.example.mynewhumblr.data.LoadState
+import com.example.mynewhumblr.data.MY_ARG
 import com.example.mynewhumblr.data.SUBSCRIBE
 import com.example.mynewhumblr.data.SubQuery
 import com.example.mynewhumblr.data.models.SubredditModel
@@ -91,8 +92,6 @@ class SubredditsFragment : Fragment() {
                 binding.common.error.isVisible = true
                 binding.recyclerView.isVisible = false
             }
-
-            else -> {}
         }
     }
 
@@ -112,8 +111,8 @@ class SubredditsFragment : Fragment() {
 
     private fun onClick(subQuery: SubQuery, item: ListItem, clickableView: ClickableView) {
         if (clickableView == ClickableView.SUBREDDIT) {
-            var name = (item as SubredditModel).namePrefixed
-            bundle.putString("MyArg", name)
+            val name = (item as SubredditModel).namePrefixed
+            bundle.putString(MY_ARG, name)
             findNavController().navigate(
                 R.id.action_subredditsFragment3_to_singleSubredditFragment,
                 bundle

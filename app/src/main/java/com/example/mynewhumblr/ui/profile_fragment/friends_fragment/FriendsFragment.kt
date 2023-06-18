@@ -39,7 +39,6 @@ class FriendsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        hideAppbarAndBottomView(requireActivity())
         binding.recyclerViewUserFriends.adapter =
             friendsAdapter.withLoadStateFooter(LoadStateAdapter())
 

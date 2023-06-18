@@ -7,14 +7,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.mynewhumblr.R
 import com.example.mynewhumblr.data.models.MeResponse
 import com.example.mynewhumblr.databinding.FragmentProfileBinding
-import com.example.mynewhumblr.databinding.FragmentSubredditsBinding
 import com.example.mynewhumblr.ui.MainActivity
 import com.example.mynewhumblr.ui.utils.launchAndCollectIn
 import dagger.hilt.android.AndroidEntryPoint
@@ -40,7 +38,6 @@ class ProfileFragment : Fragment() {
             userProfileViewModel.getCurrentUserProfile()
             showUserProfile(it)
         }
-
 
         binding.buttonFriends.setOnClickListener {
             findNavController().navigate(R.id.action_profileFragment2_to_friendsFragment)

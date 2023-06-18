@@ -12,7 +12,6 @@ class FriendsPagingSource @Inject constructor(
     override fun getRefreshKey(state: PagingState<String, UserFriends.Data.Children>): String = ""
 
     override suspend fun load(params: LoadParams<String>): LoadResult<String, UserFriends.Data.Children> {
-        val after = params.key ?: ""
         return kotlin.runCatching {
             repository.getUserFriends()
         }.fold(
@@ -20,7 +19,6 @@ class FriendsPagingSource @Inject constructor(
                 LoadResult.Page(
                     data = it.data.children,
                     prevKey = null,
-//                    nextKey = it.data.children[it.data.children.lastIndex].id
                     nextKey = null
                 )
             },

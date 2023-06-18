@@ -39,7 +39,6 @@ abstract class PagedDataDelegationAdapter<T:Any > : PagingDataAdapter<T, Recycle
         this.delegatesManager = delegatesManager as AdapterDelegatesManager<List<T>>
     }
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return delegatesManager.onCreateViewHolder(parent, viewType)
     }
@@ -47,7 +46,6 @@ abstract class PagedDataDelegationAdapter<T:Any > : PagingDataAdapter<T, Recycle
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         getItem(position)
 
-        // Internally triggers loading items around items around the given position
         delegatesManager.onBindViewHolder(snapshot().items, position, holder, null)
     }
 
@@ -55,7 +53,7 @@ abstract class PagedDataDelegationAdapter<T:Any > : PagingDataAdapter<T, Recycle
         holder: RecyclerView.ViewHolder, position: Int,
         payloads: List<*>,
     ) {
-        getItem(position) // Internally triggers loading items around items around the given position
+        getItem(position)
         delegatesManager.onBindViewHolder(snapshot().items, position, holder, payloads)
     }
 

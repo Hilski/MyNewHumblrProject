@@ -1,10 +1,7 @@
 package com.example.mynewhumblr.ui.profile_fragment
 
-import android.util.Log
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.fragment.findNavController
 import com.example.mynewhumblr.data.auth.TokenStorage
 import com.example.mynewhumblr.data.models.MeResponse
 import com.example.mynewhumblr.data.repository.Repository

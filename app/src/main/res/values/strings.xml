@@ -54,5 +54,6 @@
     <string name="all">Все</string>
     <string name="saved_or_all">Сохраненные</string>
     <string name="you_have_no_saved_posts">Сохраненных постов нет</string>
+    <string name="humblr_image">humblr_image</string>
 
 </resources>

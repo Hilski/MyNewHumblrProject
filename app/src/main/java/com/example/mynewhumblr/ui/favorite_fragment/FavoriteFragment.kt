@@ -1,51 +1,31 @@
 package com.example.mynewhumblr.ui.favorite_fragment
 
-import android.content.ActivityNotFoundException
-import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
-import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import com.example.mynewhumblr.R
-import com.example.mynewhumblr.data.BANNER_IMAGE_KEY
 import com.example.mynewhumblr.data.ClickableView
-import com.example.mynewhumblr.data.DISPLAY_NAME_KEY
-import com.example.mynewhumblr.data.ICON_KEY
-import com.example.mynewhumblr.data.IS_SUBSCRIBER_KEY
 import com.example.mynewhumblr.data.ListItem
 import com.example.mynewhumblr.data.SUBSCRIBE
 import com.example.mynewhumblr.data.SubQuery
-import com.example.mynewhumblr.data.models.ApiResult
-import com.example.mynewhumblr.data.models.PostListing
-import com.example.mynewhumblr.data.models.SubredditListing
-import com.example.mynewhumblr.data.models.UiText
-import com.example.mynewhumblr.data.models.UserFriends
 import com.example.mynewhumblr.databinding.FragmentFavoriteBinding
-import com.example.mynewhumblr.databinding.FragmentProfileBinding
-import com.example.mynewhumblr.ui.LoadStateAdapter
 import com.example.mynewhumblr.ui.subreddits_fragment.SubredditsPagedDataDelegationAdapter
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
-import kotlinx.coroutines.flow.onEach
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class FavoriteFragment : Fragment() {
     private var _binding: FragmentFavoriteBinding? = null
     private val binding get() = _binding!!
+    val bundle = Bundle()
     private val viewModel : FavoriteViewModel by viewModels()
     private val adapter by lazy { SubredditsPagedDataDelegationAdapter {
             subQuery: SubQuery, item: ListItem, clickableView: ClickableView ->
@@ -58,7 +38,6 @@ class FavoriteFragment : Fragment() {
         _binding = FragmentFavoriteBinding.inflate(layoutInflater)
         return binding.root
     }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -111,9 +90,8 @@ class FavoriteFragment : Fragment() {
                 Snackbar.make(binding.recyclerView, text, BaseTransientBottomBar.LENGTH_SHORT)
                     .show()
             }
-            ClickableView.USER -> viewModel.navigateToUser(this, subQuery.name)
-            ClickableView.SUBREDDIT ->
-                viewModel.navigateToSingleSubreddit(this, item)
+            ClickableView.USER -> {}
+            ClickableView.SUBREDDIT -> {}
         }
     }
 

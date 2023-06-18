@@ -6,7 +6,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -15,6 +14,8 @@ import com.example.mynewhumblr.R
 import com.example.mynewhumblr.data.ClickableView
 import com.example.mynewhumblr.data.ListItem
 import com.example.mynewhumblr.data.LoadState
+import com.example.mynewhumblr.data.MY_ARG
+import com.example.mynewhumblr.data.POST_ID
 import com.example.mynewhumblr.data.SUBSCRIBE
 import com.example.mynewhumblr.data.SubQuery
 import com.example.mynewhumblr.data.UNSUBSCRIBE
@@ -24,7 +25,6 @@ import com.example.mynewhumblr.ui.subreddits_fragment.SubredditsPagedDataDelegat
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
-
 
 @AndroidEntryPoint
 class SingleSubredditFragment : Fragment() {
@@ -51,8 +51,7 @@ class SingleSubredditFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        name = arguments?.getString("MyArg").toString()
-        Snackbar.make(binding.recycler, name, BaseTransientBottomBar.LENGTH_SHORT).show()
+        name = arguments?.getString(MY_ARG).toString()
 
         loadPosts()
         getLoadingState(name)
@@ -82,7 +81,6 @@ class SingleSubredditFragment : Fragment() {
                 binding.recycler.isVisible = false
                 binding.common.progressBar.isVisible = true
                 binding.common.error.isVisible = false
-
             }
 
             is LoadState.Error -> {
@@ -102,7 +100,6 @@ class SingleSubredditFragment : Fragment() {
                 binding.subscribeButton.isSelected = data.isUserSubscriber == true
                 setSubscribeButtonClick(data)
             }
-            else -> {}
         }
     }
 
@@ -159,7 +156,7 @@ class SingleSubredditFragment : Fragment() {
             }
 
             ClickableView.USER -> {
-                bundle.putString("MyArg", subQuery.name)
+                bundle.putString(MY_ARG, subQuery.name)
                 findNavController().navigate(
                     R.id.action_singleSubredditFragment_to_userFragment,
                     bundle
@@ -167,15 +164,13 @@ class SingleSubredditFragment : Fragment() {
 
              }
             ClickableView.SUBREDDIT -> {
-                bundle.putString("MyArg", subQuery.id)
-//                Toast.makeText(context, subQuery.id, Toast.LENGTH_LONG).show()
+                bundle.putString(POST_ID, subQuery.id)
+
                 findNavController().navigate(
                     R.id.action_singleSubredditFragment_to_singleSubredditCommentsFragment,
                     bundle
                 )
             }
-
-            else -> {}
         }
     }
 
@@ -183,5 +178,9 @@ class SingleSubredditFragment : Fragment() {
         binding.buttonBack.setOnClickListener {
             viewModel.navigateBack(this)
         }
+    }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

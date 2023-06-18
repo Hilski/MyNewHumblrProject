@@ -43,7 +43,5 @@ data class PostListing(
 }
 
 enum class Vote{
-    VOTED_UP,
-    VOTED_DOWN,
     DEFAULT
 }

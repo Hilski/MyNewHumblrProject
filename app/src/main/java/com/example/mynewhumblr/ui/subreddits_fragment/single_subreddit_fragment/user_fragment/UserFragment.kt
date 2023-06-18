@@ -5,7 +5,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -15,9 +14,9 @@ import com.example.mynewhumblr.R
 import com.example.mynewhumblr.data.ClickableView
 import com.example.mynewhumblr.data.ListItem
 import com.example.mynewhumblr.data.LoadState
+import com.example.mynewhumblr.data.MY_ARG
 import com.example.mynewhumblr.data.SubQuery
 import com.example.mynewhumblr.data.models.ProfileModel
-import com.example.mynewhumblr.databinding.FragmentSingleSubredditBinding
 import com.example.mynewhumblr.databinding.FragmentUserBinding
 import com.example.mynewhumblr.ui.subreddits_fragment.postsDelegate
 import com.google.android.material.snackbar.BaseTransientBottomBar
@@ -51,9 +50,7 @@ class UserFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        name = arguments?.getString("MyArg").toString()
- //       Snackbar.make(binding.recycler, name, BaseTransientBottomBar.LENGTH_SHORT).show()
- //       Toast.makeText(context, name, Toast.LENGTH_LONG).show()
+        name = arguments?.getString(MY_ARG).toString()
 
         getLoadingState(name)
         setMakeFriendsClick(name)
@@ -81,24 +78,18 @@ class UserFragment : Fragment() {
                 binding.containerView.isVisible = false
                 binding.common.progressBar.isVisible = false
                 binding.common.error.isVisible = true
-
                 Snackbar.make(binding.recycler, "Error", BaseTransientBottomBar.LENGTH_SHORT).show()
             }
 
             is LoadState.Content -> {
-
- //               Snackbar.make(binding.recycler, "Content", BaseTransientBottomBar.LENGTH_SHORT).show()
-
                 binding.containerView.isVisible = true
                 binding.common.progressBar.isVisible = false
                 binding.common.error.isVisible = false
                 val data = state.data as ProfileModel
-                Snackbar.make(binding.recycler, data.urlAvatar.toString(), BaseTransientBottomBar.LENGTH_SHORT).show()
                 if (data.urlAvatar != null) loadAvatar(data.urlAvatar!!)
                 loadProfileTexts(data)
                 loadUserContent(state.data2 as List<ListItem>)
             }
-            else -> {}
         }
     }
 
@@ -109,7 +100,6 @@ class UserFragment : Fragment() {
             .diskCacheStrategy(DiskCacheStrategy.ALL)
             .placeholder(R.drawable.placeholder)
             .into(binding.imageView)
-        Snackbar.make(binding.recycler, url, BaseTransientBottomBar.LENGTH_SHORT).show()
     }
 
     private fun loadProfileTexts(data: ProfileModel) {
@@ -123,11 +113,8 @@ class UserFragment : Fragment() {
     }
 
     private fun loadUserContent(data: List<ListItem>) {
-
         binding.recycler.adapter = adapter
         adapter.items = data
- //       Snackbar.make(binding.recycler, data.toString(), BaseTransientBottomBar.LENGTH_SHORT).show()
-
     }
 
     private fun setMakeFriendsClick(name: String) {
@@ -146,8 +133,11 @@ class UserFragment : Fragment() {
             ClickableView.UNSAVE -> viewModel.unsavePost(postName = subQuery.name)
             ClickableView.VOTE ->
                 viewModel.votePost(voteDirection = subQuery.voteDirection, postName = subQuery.name)
-
             else -> {}
         }
+    }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

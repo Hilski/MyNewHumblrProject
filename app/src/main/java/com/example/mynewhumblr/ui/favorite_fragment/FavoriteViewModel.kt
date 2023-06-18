@@ -1,23 +1,15 @@
 package com.example.mynewhumblr.ui.favorite_fragment
 
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.fragment.findNavController
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.example.mynewhumblr.R
 import com.example.mynewhumblr.data.FavoritesQuery
 import com.example.mynewhumblr.data.ListItem
 import com.example.mynewhumblr.data.ListTypes
 import com.example.mynewhumblr.data.SubQuery
-import com.example.mynewhumblr.data.models.ApiResult
-import com.example.mynewhumblr.data.models.PostListing
-import com.example.mynewhumblr.data.models.SubredditListing
-import com.example.mynewhumblr.data.models.UiText
-import com.example.mynewhumblr.data.models.UserFriends
 import com.example.mynewhumblr.data.repository.PagingSource
 import com.example.mynewhumblr.data.repository.Repository
 import com.example.mynewhumblr.ui.utils.Change
@@ -25,12 +17,10 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -70,8 +60,8 @@ class FavoriteViewModel @Inject constructor(
         _thingFlow.value = Change(query)
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
-    var thingList: Flow<PagingData<ListItem>> =
+ @OptIn(ExperimentalCoroutinesApi::class)
+ var thingList: Flow<PagingData<ListItem>> =
         _thingFlow.asStateFlow().flatMapLatest { query ->
             getThingList(query.value.listing, query.value.source).flow
         }.cachedIn(CoroutineScope(Dispatchers.IO))
@@ -104,25 +94,6 @@ class FavoriteViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             repository.unsavePost(postName)
         }
-    }
-
-    fun navigateToSingleSubreddit(fragment: Fragment, item: ListItem) {
- /*       fragment.findNavController().navigate(
-            FavouritesFragmentDirections
-                .actionNavigationFavouritesToNavigationSingleSubredditFragment(
-                    (item as Subreddit).namePrefixed)
-        )
-
-  */
-    }
-
-    fun navigateToUser(fragment: Fragment, name: String) {
-/*        fragment.findNavController().navigate(
-            FavouritesFragmentDirections
-                .actionNavigationFavouritesToNavigationUser(name)
-        )
-
- */
     }
 
     companion object {

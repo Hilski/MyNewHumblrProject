@@ -2,11 +2,9 @@ package com.example.mynewhumblr.ui.subreddits_fragment
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-
 import androidx.paging.cachedIn
 import com.example.mynewhumblr.data.ListItem
 import com.example.mynewhumblr.data.ListTypes
@@ -58,7 +56,6 @@ class SubredditsViewModel  @Inject constructor(
         }
     }
 
-
     @OptIn(ExperimentalCoroutinesApi::class)
     var subredditsList: Flow<PagingData<ListItem>> =
         _subredditsSourceFlow.asStateFlow().flatMapLatest { source ->
@@ -78,7 +75,6 @@ class SubredditsViewModel  @Inject constructor(
             config = PagingConfig(pageSize = PAGE_SIZE_SUBREDDITS),
             pagingSourceFactory = { PagingSource(repository, source, listType) }
         )
-
 
     fun subscribe(subQuery: SubQuery) {
         viewModelScope.launch(Dispatchers.IO + handler) {

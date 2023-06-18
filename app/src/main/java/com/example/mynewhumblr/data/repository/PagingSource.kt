@@ -15,7 +15,6 @@ class PagingSource (
 
     override fun getRefreshKey(state: PagingState<String, ListItem>): String = FIRST_PAGE
 
-
     override suspend fun load(params: LoadParams<String>): LoadResult<String, ListItem> {
         val page = params.key ?: FIRST_PAGE
         interceptor.level = HttpLoggingInterceptor.Level.BODY

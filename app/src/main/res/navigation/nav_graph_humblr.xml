@@ -19,7 +19,11 @@
         android:id="@+id/favoriteFragment2"
         android:name="com.example.mynewhumblr.ui.favorite_fragment.FavoriteFragment"
         android:label="fragment_favorite"
-        tools:layout="@layout/fragment_favorite" />
+        tools:layout="@layout/fragment_favorite" >
+        <action
+            android:id="@+id/action_favoriteFragment2_to_singleSubredditFragment"
+            app:destination="@id/singleSubredditFragment" />
+    </fragment>
     <fragment
         android:id="@+id/profileFragment2"
         android:name="com.example.mynewhumblr.ui.profile_fragment.ProfileFragment"
@@ -53,7 +57,11 @@
         android:id="@+id/singleSubredditCommentsFragment"
         android:name="com.example.mynewhumblr.ui.subreddits_fragment.single_subreddit_fragment.single_subreddit_comments_fragment.SingleSubredditCommentsFragment"
         android:label="fragment_single_subreddit_comments"
-        tools:layout="@layout/fragment_single_subreddit_comments" />
+        tools:layout="@layout/fragment_single_subreddit_comments" >
+        <action
+            android:id="@+id/action_singleSubredditCommentsFragment_to_userFragment"
+            app:destination="@id/userFragment" />
+    </fragment>
     <fragment
         android:id="@+id/friendsFragment"
         android:name="com.example.mynewhumblr.ui.profile_fragment.friends_fragment.FriendsFragment"

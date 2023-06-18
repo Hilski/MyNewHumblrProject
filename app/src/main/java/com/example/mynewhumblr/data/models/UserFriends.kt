@@ -1,7 +1,5 @@
 package com.example.mynewhumblr.data.models
 
-import com.google.gson.annotations.SerializedName
-
 data class UserFriends(
     val `data`: Data,
     val kind: String
