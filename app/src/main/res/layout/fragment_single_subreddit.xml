@@ -9,6 +9,7 @@
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/topAppBar"
         style="@style/MyToolbarStyle"
+        android:background="@color/blue"
         android:layout_width="match_parent"
         tools:ignore="MissingConstraints">
 
