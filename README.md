@@ -15,7 +15,7 @@ Android Kotlin. Проект с: Clean, MVVM, Hilt, coroutines, OAuth2, OkHttp I
 ![Make_friends](https://github.com/Hilski/MyNewHumblrProject/assets/109789798/d732631d-ca2c-4d05-9735-68b0dc14e908)
 ![Friendlist](https://github.com/Hilski/MyNewHumblrProject/assets/109789798/777b7962-d764-44ef-9dab-b2205323cda9)
 
-Экран профиля: список друзей, выход:
+Выход:
 
 
 ![Logout](https://github.com/Hilski/MyNewHumblrProject/assets/109789798/f706385c-a478-4ebb-b196-bff13063f5e9)
